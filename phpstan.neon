@@ -1,0 +1,14 @@
+parameters:
+    level: 5
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false
+    checkGenericClassInNonGenericObjectType: false
+    paths:
+        - src/
+    excludePaths:
+        - src/Console/Installer.php
+    cakephp:
+            app_path: src/
+
+
+
