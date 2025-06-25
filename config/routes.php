@@ -78,6 +78,19 @@ return function (RouteBuilder $routes): void {
         $builder->fallbacks();
     });
 
+    $routes->scope('/api', function (RouteBuilder $routes) {
+        $routes->prefix('v1', function (RouteBuilder $routes) {
+            $routes->resources('todo');
+
+            $routes->scope('/auth', function (RouteBuilder $routes) {
+                $routes->connect('/login', ['controller' => 'Auth', 'action' => 'login']);
+                $routes->connect('/logout', ['controller' => 'Auth', 'action' => 'logout']);
+                $routes->connect('/register', ['controller' => 'Auth', 'action' => 'register']);
+                $routes->connect('/refresh', ['controller' => 'Auth', 'action' => 'refresh']);
+            });
+        });
+    });
+
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.
