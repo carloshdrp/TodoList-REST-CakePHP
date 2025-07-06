@@ -101,6 +101,11 @@ return [
             'url' => env('CACHE_DEFAULT_URL', null),
         ],
 
+        'throttle' => [
+            'className' => 'Apcu',
+            'prefix' => 'throttle_'
+        ],
+
         /*
          * Configure the cache used for general framework caching.
          * Translation cache files are stored with this configuration.
