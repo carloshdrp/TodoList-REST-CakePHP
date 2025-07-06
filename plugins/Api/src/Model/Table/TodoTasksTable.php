@@ -66,15 +66,15 @@ class TodoTasksTable extends Table
     {
         $validator
             ->scalar('title')
-            ->maxLength('title', 255)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title');
+            ->maxLength('title', 255, 'Limite de caracteres excedido para o título.')
+            ->requirePresence('title', 'create', 'O título é obrigatório.')
+            ->notEmptyString('title', 'O título não pode estar vazio.');
 
         $validator
             ->scalar('description')
-            ->maxLength('description', 1000)
-            ->requirePresence('description', 'create')
-            ->notEmptyString('description');
+            ->maxLength('description', 1000, 'Limite de caracteres excedido para a descrição.')
+            ->requirePresence('description', 'create', 'A descrição é obrigatória')
+            ->notEmptyString('description', 'A descrição não pode estar vazia.');
 
         $validator
             ->integer('user_id')

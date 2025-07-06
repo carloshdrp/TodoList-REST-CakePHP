@@ -29,6 +29,7 @@ class TodoTask extends Entity
     protected $_accessible = [
         'title' => true,
         'description' => true,
+        'user_id' => true,
         'created' => true,
         'modified' => true,
     ];
