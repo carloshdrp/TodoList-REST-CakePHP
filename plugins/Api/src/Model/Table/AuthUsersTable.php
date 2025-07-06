@@ -49,12 +49,12 @@ class AuthUsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Tokens', [
+        $this->hasMany('AuthTokens', [
             'foreignKey' => 'id',
             'className' => 'Api.AuthTokens'
         ]);
 
-        $this->hasMany('Tasks', [
+        $this->hasMany('TodoTasks', [
             'foreignKey' => 'id',
             'className' => 'Api.TodoTasks'
         ]);
