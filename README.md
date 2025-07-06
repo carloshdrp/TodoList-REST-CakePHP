@@ -1,53 +1,105 @@
-# CakePHP Application Skeleton
+# Lista de Tarefas REST API - CakePHP
 
-![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+![CakePHP](https://img.shields.io/badge/CakePHP-D33C43?style=for-the-badge&logo=cakephp&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-2b5d80.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/carloshdrp/TodoList-REST-CakePHP?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/carloshdrp/TodoList-REST-CakePHP?style=for-the-badge)
+![GitHub stars](https://img.shields.io/github/stars/carloshdrp/TodoList-REST-CakePHP?style=for-the-badge)
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 4.x.
+Uma API REST completa para gerenciamento de tarefas (To-Do List) construída com CakePHP 4.6, incluindo autenticação, rate limiting e paginação.
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+## 🚀 Funcionalidades
 
-## Installation
+- ✅ **CRUD completo** de tarefas
+- 🔐 **Autenticação JWT** com refresh tokens
+- 📊 **Paginação** com parâmetros customizáveis
+- 🛡️ **Rate Limiting** para proteção contra spam
+- 🐳 **Docker** para desenvolvimento
+- 🔄 **API RESTful** seguindo padrões HTTP
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+## 📋 Endpoints da API
 
-If Composer is installed globally, run
+### Tarefas
 
-```bash
-composer create-project --prefer-dist cakephp/app
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| `GET` | `/tasks` | Lista todas as tarefas com paginação |
+| `POST` | `/tasks` | Cria uma nova tarefa |
+| `POST` | `/tasks/{id}` | Atualiza uma tarefa existente |
+| `DELETE` | `/tasks/{id}` | Remove uma tarefa |
+
+### Parâmetros de Paginação
+
+- `page`: Número da página (padrão: 1)
+- `limit`: Itens por página (padrão: 10)
+
+**Exemplo de requisição:**
+```curl
+GET api/v1/tasks?page=1&limit=5
 ```
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
-
-```bash
-composer create-project --prefer-dist cakephp/app myapp
+**Exemplo de resposta:**
+```json
+{
+    "success": true,
+    "data": [
+        {
+            "id": 2,
+            "title": "Segunda Tarefa",
+            "description": "Descrição da segunda tarefa"
+        },
+        {
+            "id": 1,
+            "title": "Primeira Tarefa",
+            "description": "Descrição da tarefa"
+        }
+    ],
+    "page": 1,
+    "limit": 5,
+    "total": 2
+}
 ```
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+## 🛠️ Tecnologias Utilizadas
 
-```bash
-bin/cake server -p 8765
+- **CakePHP 4.6** - Framework PHP
+- **PHP 8.2** - Linguagem de programação
+- **MySQL** - Banco de dados
+- **Docker** - Containerização
+- **nginx** - Servidor HTTP
+- **APCu** - Cache para rate limiting
+- **Lcobucci\JWT** - Biblioteca para JWT
+- **Composer** - Gerenciador de dependências
+
+## 🔒 Rate Limiting
+
+A API implementa rate limiting para proteger contra abuso:
+
+- Limite padrão: 50 requisições por minuto
+- Identificação: Por token de autorização ou IP
+- Resposta quando excedido: HTTP 429
+
+**Exemplo de resposta com limite excedido:**
+```json
+{
+"success": false,
+"message": "Rate Limit excedido. Tente novamente mais tarde."
+}
 ```
 
-Then visit `http://localhost:8765` to see the welcome page.
+## 🤝 Contribuindo
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
-## Update
+## 🔗 Links Úteis
+- [CakePHP Documentation](https://book.cakephp.org/4/en/index.html)
+- [REST API Best Practices](https://restfulapi.net/)
+- [Docker Documentation](https://docs.docker.com/)
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
-## Configuration
-
-Read and edit the environment specific `config/app_local.php` and set up the
-`'Datasources'` and any other configuration relevant for your application.
-Other environment agnostic settings can be changed in `config/app.php`.
-
-## Layout
-
-The app skeleton uses [Milligram](https://milligram.io/) (v1.3) minimalist CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+⭐ Se este projeto te ajudou, considere dar uma estrela no repositório!
