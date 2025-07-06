@@ -82,7 +82,17 @@ return function (RouteBuilder $routes): void {
         $routes->prefix('V1', function (RouteBuilder $routes): void {
             $routes->setExtensions(['json']);
 
-            $routes->resources('Todo');
+            $routes->scope('/tasks', function (RouteBuilder $routes) {
+                $routes->get('/', ['controller' => 'Tasks', 'action' => 'index']);
+
+                $routes->post('/', ['controller' => 'Tasks', 'action' => 'edit']);
+
+                $routes->post('/{id}', ['controller' => 'Tasks', 'action' => 'edit'])
+                    ->setPass(['id']);
+
+                $routes->delete('/{id}', ['controller' => 'Tasks', 'action' => 'delete'])
+                    ->setPass(['id']);
+            });
 
             $routes->scope('/auth', function (RouteBuilder $routes): void {
                 $routes->post('/login', ['controller' => 'Auth', 'action' => 'login']);
