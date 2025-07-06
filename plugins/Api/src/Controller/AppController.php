@@ -7,6 +7,8 @@ use App\Controller\AppController as BaseController;
 
 class AppController extends BaseController
 {
+    protected ?int $user_id = null;
+
     public function initialize(): void
     {
         parent::initialize();
@@ -17,5 +19,12 @@ class AppController extends BaseController
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Authentication.Authentication');
+    }
+
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+        $identity = $this->Authentication->getIdentity();
+        if($identity) $this->user_id = $identity->getIdentifier();
     }
 }
