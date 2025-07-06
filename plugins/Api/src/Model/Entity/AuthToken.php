@@ -5,6 +5,7 @@ namespace Api\Model\Entity;
 
 use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
+use DateTime;
 
 /**
  * AuthToken Entity
@@ -34,6 +35,8 @@ class AuthToken extends Entity
         'created' => true,
         'modified' => true,
         'auth_user' => true,
+        'expires' => true,
+        'refresh' => true,
     ];
 
     /**
@@ -44,4 +47,9 @@ class AuthToken extends Entity
     protected $_hidden = [
         'token',
     ];
+
+    public function isExpired(): bool
+    {
+        return $this->expires < new DateTime();
+    }
 }

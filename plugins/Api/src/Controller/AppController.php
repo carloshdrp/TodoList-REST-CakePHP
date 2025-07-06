@@ -14,5 +14,8 @@ class AppController extends BaseController
         $this->viewBuilder()->setClassName('Json');
         $this->viewBuilder()->disableAutoLayout();
         $this->viewBuilder()->setOption('serialize', true);
+
+        $this->loadComponent('RequestHandler');
+        $this->loadComponent('Authentication.Authentication');
     }
 }

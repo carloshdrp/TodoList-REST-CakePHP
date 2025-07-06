@@ -10,7 +10,7 @@ class CreateTokens extends AbstractMigration
         $table = $this->table('auth_tokens');
 
         $table->addColumn('token', 'string', [
-            'length' => 255,
+            'length' => 3000,
             'null' => false
         ])->addColumn('user_id', 'integer', [
             'null' => false,

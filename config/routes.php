@@ -78,16 +78,20 @@ return function (RouteBuilder $routes): void {
         $builder->fallbacks();
     });
 
-    $routes->scope('/api', function (RouteBuilder $routes) {
-        $routes->prefix('v1', function (RouteBuilder $routes) {
-            $routes->resources('todo');
+    $routes->plugin('Api', ['path' => '/api'], function (RouteBuilder $routes): void {
+        $routes->prefix('V1', function (RouteBuilder $routes): void {
+            $routes->setExtensions(['json']);
 
-            $routes->scope('/auth', function (RouteBuilder $routes) {
-                $routes->connect('/login', ['controller' => 'Auth', 'action' => 'login']);
-                $routes->connect('/logout', ['controller' => 'Auth', 'action' => 'logout']);
-                $routes->connect('/register', ['controller' => 'Auth', 'action' => 'register']);
-                $routes->connect('/refresh', ['controller' => 'Auth', 'action' => 'refresh']);
+            $routes->resources('Todo');
+
+            $routes->scope('/auth', function (RouteBuilder $routes): void {
+                $routes->post('/login', ['controller' => 'Auth', 'action' => 'login']);
+                $routes->post('/logout', ['controller' => 'Auth', 'action' => 'logout']);
+                $routes->post('/register', ['controller' => 'Auth', 'action' => 'register']);
+                $routes->post('/refresh', ['controller' => 'Auth', 'action' => 'refresh']);
             });
+
+            $routes->fallbacks();
         });
     });
 

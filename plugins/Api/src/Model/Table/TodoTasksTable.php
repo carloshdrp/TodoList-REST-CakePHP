@@ -49,7 +49,7 @@ class TodoTasksTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('AuthUsers', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
             'className' => 'Api.AuthUsers',

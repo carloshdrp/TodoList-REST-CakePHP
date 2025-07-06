@@ -12,6 +12,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use DateTime;
 
 /**
  * AuthTokens Model
@@ -52,7 +53,7 @@ class AuthTokensTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Users', [
+        $this->belongsTo('AuthUsers', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
             'className' => 'Api.AuthUsers',
@@ -69,13 +70,24 @@ class AuthTokensTable extends Table
     {
         $validator
             ->scalar('token')
-            ->maxLength('token', 255)
+            ->maxLength('token', 3000)
             ->requirePresence('token', 'create')
             ->notEmptyString('token');
 
         $validator
             ->integer('user_id')
             ->notEmptyString('user_id');
+
+        $validator
+            ->scalar('refresh')
+            ->boolean('refresh')
+            ->requirePresence('refresh', 'create')
+            ->notEmptyString('refresh');
+
+        $validator
+            ->scalar('expires')
+            ->requirePresence('expires', 'create')
+            ->notEmptyString('expires');
 
         return $validator;
     }
@@ -92,5 +104,18 @@ class AuthTokensTable extends Table
         $rules->add($rules->existsIn('user_id', 'AuthUsers'), ['errorField' => 'user_id']);
         $rules->isUnique(['token']);
         return $rules;
+    }
+
+    public function cleanExpiredTokens($expiredTokens)
+    {
+        return $this->deleteAll(['expires <' => new  DateTime()]);
+    }
+
+    public function revokeUserTokens(int $userId, string $type = null): int
+    {
+        $where = ['user_id' => $userId];
+        if ($type) $where['refresh'] = $type == 'refresh' ? 1 : 0;
+
+        return $this->deleteAll($where);
     }
 }
