@@ -33,6 +33,7 @@ use Cake\Http\Response;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Muffin\Throttle\Middleware\ThrottleMiddleware;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -72,6 +73,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
         // Load more plugins here
         $this->addPlugin('Api');
+        $this->addPlugin('Muffin/Throttle');
     }
 
     /**
@@ -82,6 +84,25 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $throttleMiddleware = new ThrottleMiddleware([
+            // Resposta quando o limite é excedido
+            'response' => [
+                'body' => json_encode([
+                    'success' => false,
+                    'message' => 'Rate Limit excedido. Tente novamente mais tarde.'
+                ]),
+                'type' => 'application/json'
+            ],
+            'period' => 60,
+            'limit' => 50,
+            'identifier' => function ($request) {
+                if (!empty($request->getHeaderLine('Authorization'))) {
+                    return str_replace('Bearer ', '', $request->getHeaderLine('Authorization'));
+                }
+                return $request->clientIp();
+            }
+        ]);
+
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -117,7 +138,8 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     ]));
                     return $response;
                 }
-            });
+            })
+            ->add($throttleMiddleware);
 
         return $middlewareQueue;
     }
